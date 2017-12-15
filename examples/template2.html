@@ -1,0 +1,38 @@
+<!doctype html>
+<title>Template Example 1</title>
+
+<!--
+  A button we can press each time we
+  want to use the template
+-->
+<button id=b1>GO!</button>
+
+<!--
+  This is where we will put elements when
+  they are cloned into real elements.
+-->
+<main id=m1>
+</main>
+
+<!--
+  A template, with a nested em element which we
+  shall modify each time the template is used.
+ -->
+<template id=t1>
+  <p>The time now is <em>not specified</em>.</p>
+</template>
+
+<!--
+  Attach the button to a function that
+  clones the node, finds the em element within,
+  modifies the content of that em element to show
+  the current time and then adds it all to the DOM.
+-->
+<script>
+  window.b1.addEventListener("click", (e) => {
+    const cloned = window.t1.content.cloneNode(true);
+    const updateThis = cloned.querySelector("em");
+    updateThis.textContent = new Date().toLocaleTimeString();
+    window.m1.appendChild(cloned);
+  })
+</script>

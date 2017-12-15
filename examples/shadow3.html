@@ -1,0 +1,48 @@
+<!doctype html>
+<title>Shadow DOM Example 3</title>
+<h1>Shadow DOM Example 3 (SELECT - not working yet)</h1>
+
+<!--
+  A button we can press when we're ready
+  to replace some content
+-->
+<button id=b1>GO!</button>
+
+<main>
+
+  <!--
+    Some content that will be replaced.
+  -->
+  <section id=example>
+    <p id=one>Uno</p>
+    <p id=two>Dos</p>
+    <p id=three>Tres</p>
+  </section>
+
+</main>
+
+<template id=t1>
+  <content select="#one">Um</content>
+  <content select="#two">Hey</content>
+  <content select="*">Man...</content>
+</tamplate>
+
+
+<script>
+  const opts = {
+    mode: "open"
+  };
+
+  /*
+    Attach the button to a function that
+    establishes a shadow root for the `example`
+    node, and then populates that shadow DOM
+    with some content.  This time with an added
+    <style> element that only affects the
+    shadow DOM tree.
+  */
+  window.b1.addEventListener("click", () => {
+    var shadow = window.example.attachShadow(opts);
+    shadow.innerHTML = window.t1.innerHTML;
+  });
+</script>

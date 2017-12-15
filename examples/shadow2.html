@@ -1,0 +1,48 @@
+<!doctype html>
+<title>Shadow DOM Example 2</title>
+<h1>Shadow DOM Example 2</h1>
+
+<!--
+  A button we can press when we're ready
+  to replace some content
+-->
+<button id=b1>GO!</button>
+
+<main>
+
+  <!--
+    Some content that will be replaced.
+  -->
+  <section id=example>
+    <p>one</p>
+    <p>two</p>
+  </section>
+
+  <section>
+    <p>thee</p>
+    <p>four</p>
+  </section>
+
+</main>
+
+<script>
+  const opts = {
+    mode: "open"
+  };
+
+  /*
+    Attach the button to a function that
+    establishes a shadow root for the `example`
+    node, and then populates that shadow DOM
+    with some content.  This time with an added
+    <style> element that only affects the
+    shadow DOM tree.
+  */
+  window.b1.addEventListener("click", () => {
+    var shadow = window.example.attachShadow(opts);
+    shadow.innerHTML = `
+      <style>p { color: red; };</style>
+      <p>I am new!</p>
+      <p>So very lovely and new!</p>`;
+  });
+</script>

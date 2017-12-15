@@ -1,0 +1,11 @@
+{
+  "name": "ws_components",
+  "version": "1.0.0",
+  "description": "Intro to components.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rich Boakes <rjb@boakes.org> (http://boakes.org/)",
+  "license": "ISC"
+}
