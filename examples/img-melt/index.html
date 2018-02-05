@@ -11,8 +11,9 @@
 
       this.totalMoved=0;
       this.shift = [-4, 0, 0, 0, 4];
-      this.jiggle = false;
-      this.blend = false;
+      this.jiggle = this.hasAttribute('jiggle');
+      this.blend = this.hasAttribute('blend');
+      this.src = this.getAttribute('src') || false;
 
       // create shadow dom and a canvas and attach the two together
       this.canvas = document.createElement('canvas');
@@ -22,16 +23,9 @@
       });
       this.shadow.appendChild(this.canvas);
 
-      if (this.hasAttribute('jiggle')) {
-        this.jiggle = !!this.getAttribute('jiggle');
-      }
 
-      if (this.hasAttribute('blend')) {
-        this.blend = !!this.getAttribute('blend');
-      }
-
-      if (this.hasAttribute('src')) {
-        console.log(this.getAttribute('src'));
+      if (this.src) {
+        console.log(this.src);
         let img = new Image();
         let obj = this;
 
@@ -47,10 +41,10 @@
           console.log(obj);
           window.requestAnimationFrame(obj.step.bind(obj));
         }
-        img.src = this.getAttribute('src');
+        img.src = this.src;
       } else {
-        this.w = this.hasAttribute('width') ? this.getAttribute('width') : 300;
-        this.h = this.hasAttribute('height') ? this.getAttribute('height') : 300;
+        this.w = this.getAttribute('width') || 300;
+        this.h = this.getAttribute('height') || 300;
         this.drawBalls();
         window.requestAnimationFrame(this.step.bind(this));
       }
