@@ -141,8 +141,8 @@ class Melt extends HTMLElement {
   }
 
 
-  step(timestamp) {
-    let data = this.ctx.getImageData(0, 0, this.w, this.h);
+  step() {
+    let img = this.ctx.getImageData(0, 0, this.w, this.h);
     let moved = 0;
 
     // loop from the bottom to the top
@@ -152,17 +152,16 @@ class Melt extends HTMLElement {
       for (let x = this.w-1; x >= 0; x--) {
         const above = this.xyToArr(x, y);
         const below = this.xyToArr(this.jiggle(x), y+1);
-        if (data.data[below + 3] == 0 && data.data[above + 3] != 0) {
+        if (img.data[below + 3] == 0 && img.data[above + 3] != 0) {
           moved++;
-          this.swapPixels(data, above, below)
-        }
-        if (this.blend) {
-          this.mergePixels(data, above, below)
+          this.swapPixels(img.data, above, below);
+        } else if (this.blend) {
+          if (this.mergePixels(img.data, above, below)) moved++;
         }
       }
     }
     if (moved > 0) {
-      this.ctx.putImageData(data, 0, 0, 0, 0, this.w, this.h);
+      this.ctx.putImageData(img, 0, 0, 0, 0, this.w, this.h);
       window.requestAnimationFrame(this.stepBound);
       this.totalMoved += moved;
     } else {
