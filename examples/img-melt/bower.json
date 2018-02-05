@@ -1,0 +1,14 @@
+{
+  "name": "img-melt",
+  "homepage": "https://github.com/portsoc/ws_components",
+  "authors": [
+    "Rich Boakes <rjb@port.ac.uk>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.1.0"
+  }
+}
