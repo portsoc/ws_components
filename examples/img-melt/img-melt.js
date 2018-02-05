@@ -102,20 +102,18 @@ class Melt extends HTMLElement {
   }
 
   swapPixels(data, a, b) {
-    const tmp = [
-      data.data[b],
-      data.data[b + 1],
-      data.data[b + 2],
-      data.data[b + 3],
-    ];
-    data.data[b] = data.data[a];
-    data.data[b + 1] = data.data[a + 1];
-    data.data[b + 2] = data.data[a + 2];
-    data.data[b + 3] = data.data[a + 3];
-    data.data[a] = tmp[0];
-    data.data[a + 1] = tmp[1];
-    data.data[a + 2] = tmp[2];
-    data.data[a + 3] = tmp[3];
+    const tmp0 = data[b];
+    const tmp1 = data[b + 1];
+    const tmp2 = data[b + 2];
+    const tmp3 = data[b + 3];
+    data[b] = data[a];
+    data[b + 1] = data[a + 1];
+    data[b + 2] = data[a + 2];
+    data[b + 3] = data[a + 3];
+    data[a] = tmp0;
+    data[a + 1] = tmp1;
+    data[a + 2] = tmp2;
+    data[a + 3] = tmp3;
   }
 
   /*
