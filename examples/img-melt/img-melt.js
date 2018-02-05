@@ -5,8 +5,7 @@ class Melt extends HTMLElement {
 
   connectedCallback() {
     this.totalMoved=0;
-    this.shift = [-4, 0, 0, 0, 4];
-    this.jiggle = this.hasAttribute('jiggle');
+    if (!this.hasAttribute('jiggle')) this.jiggle = this.noJiggle;
     this.blend = this.hasAttribute('blend');
     this.src = this.getAttribute('src') || false;
 
@@ -62,8 +61,20 @@ class Melt extends HTMLElement {
     }
   }
 
-  addyFor(x, y, jiggle = false) {
-    return y * (this.w * 4) + x * 4 + (jiggle ? this.shift[Math.round(Math.random()*4)] : 0);
+  xyToArr(x, y) {
+    return (y * this.w + x) * 4;
+  }
+
+  jiggle(x) {
+    const shiftProbability = 1/8;
+    const r = Math.random();
+    if (r < shiftProbability && x > 0) x -= 1;
+    if (r >= 1 - shiftProbability && x < this.w - 1) x += 1;
+    return x;
+  }
+
+  noJiggle(x) {
+    return x;
   }
 
   randomByte() {
@@ -131,9 +142,8 @@ class Melt extends HTMLElement {
     // non transparent and the pixel below is transparent.
     for (let y = this.h; y >= 0; y--) {
       for (let x = this.w; x >= 0; x--) {
-        const jiggle = this.jiggle && x>0 && x<this.w;
-        const above = this.addyFor(x, y);
-        const below = this.addyFor(x, y+1, jiggle);
+        const above = this.xyToArr(x, y);
+        const below = this.xyToArr(this.jiggle(x), y+1);
         if (data.data[below + 3] == 0 && data.data[above + 3] != 0) {
           moved++;
           this.swapPixels(data, above, below)
