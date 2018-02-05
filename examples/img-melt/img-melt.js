@@ -118,18 +118,28 @@ class Melt extends HTMLElement {
     data.data[a + 3] = tmp[3];
   }
 
-  nudge(data, a, b) {
-    if (data.data[a] > data.data[b]) {
-      data.data[a]--;
-      data.data[b]++;
-    }
-  }
-
+  /*
+   * merge pixels to move colours down and transparency up:
+   * if the pixel below has some transparency, and the above has some opacity,
+   * shift as much opacity from above to below as you can,
+   * and do a weighted average of the two colours based on how much opacity
+   * below had and how much was transferred
+   */
   mergePixels(data, a, b) {
-    this.nudge(data, a, b);
-    this.nudge(data, a+1, b+1);
-    this.nudge(data, a+2, b+2);
-    this.nudge(data, a+3, b+3);
+    if ((data[a+3] === 0) || (data[b+3] === 255)) return false;
+
+    const finalAlpha = Math.min(data[a+3] + data[b+3], 255);
+    const transferred = finalAlpha - data[b+3];
+    const original = data[b+3];
+    function weightedAvg(a,b) {
+      return Math.round((a*transferred + b*original) / finalAlpha);
+    }
+    data[b] = weightedAvg(data[a], data[b]);
+    data[b+1] = weightedAvg(data[a+1], data[b+1]);
+    data[b+2] = weightedAvg(data[a+2], data[b+2]);
+    data[b+3] = finalAlpha;
+    data[a+3] -= transferred;
+    return true;
   }
 
 
