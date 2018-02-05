@@ -140,8 +140,8 @@ class Melt extends HTMLElement {
     // loop from the bottom to the top
     // moving the upper pixel down if it is
     // non transparent and the pixel below is transparent.
-    for (let y = this.h; y >= 0; y--) {
-      for (let x = this.w; x >= 0; x--) {
+    for (let y = this.h-2; y >= 0; y--) {
+      for (let x = this.w-1; x >= 0; x--) {
         const above = this.xyToArr(x, y);
         const below = this.xyToArr(this.jiggle(x), y+1);
         if (data.data[below + 3] == 0 && data.data[above + 3] != 0) {
