@@ -1,7 +1,9 @@
 class Melt extends HTMLElement {
   constructor() {
     super();
+  }
 
+  connectedCallback() {
     this.totalMoved=0;
     this.shift = [-4, 0, 0, 0, 4];
     this.jiggle = this.hasAttribute('jiggle');
