@@ -45,8 +45,6 @@ class Melt extends HTMLElement {
       this.drawBalls();
       window.requestAnimationFrame(this.stepBound);
     }
-
-
   }
 
   drawBalls() {
@@ -55,11 +53,11 @@ class Melt extends HTMLElement {
     this.canvas.setAttribute("height", this.h);
 
     for (let i = 0; i < 100; i++) {
-      this.circ(
+      this.circle(
         Math.random() * this.w,
         Math.random() * this.h,
         Math.random() * this.w / 10,
-        this.ctx
+        this.randomColour()
       );
     }
   }
@@ -68,23 +66,23 @@ class Melt extends HTMLElement {
     return y * (this.w * 4) + x * 4 + (jiggle ? this.shift[Math.round(Math.random()*4)] : 0);
   }
 
-  rnd() {
-    return 255 * Math.random() | 0;
+  randomByte() {
+    return Math.floor(255 * Math.random());
   }
 
-  rndCol() {
-    return `rgb(${this.rnd()},${this.rnd()},${this.rnd()})`;
+  randomColour() {
+    return `rgb(${this.randomByte()},${this.randomByte()},${this.randomByte()})`;
   }
 
-  circ(x, y, r, ctx) {
+  circle(x, y, r, col) {
     x += 0.5;
     y += 0.5;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.closePath;
-    ctx.fillStyle = this.rndCol();
-    ctx.fill();
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
+    this.ctx.arc(x, y, r, 0, 2 * Math.PI);
+    this.ctx.closePath;
+    this.ctx.fillStyle = col;
+    this.ctx.fill();
   }
 
   setcols(x, y, cols) {
@@ -150,7 +148,7 @@ class Melt extends HTMLElement {
       window.requestAnimationFrame(this.stepBound);
       this.totalMoved += moved;
     } else {
-      console.log(`Image collapsed after ${this.totalMoved} swaps.`)
+      console.log(`Image collapsed after ${this.totalMoved} moves.`)
     }
   }
 
