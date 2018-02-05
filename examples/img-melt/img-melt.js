@@ -10,6 +10,8 @@ class Melt extends HTMLElement {
     this.blend = this.hasAttribute('blend');
     this.src = this.getAttribute('src') || false;
 
+    this.stepBound = this.step.bind(this);
+
     // create shadow dom and a canvas and attach the two together
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext("2d");
@@ -34,14 +36,14 @@ class Melt extends HTMLElement {
         obj.w = this.width;
         obj.h = this.height;
         console.log(obj);
-        window.requestAnimationFrame(obj.step.bind(obj));
+        window.requestAnimationFrame(obj.stepBound);
       }
       img.src = this.src;
     } else {
       this.w = this.getAttribute('width') || 300;
       this.h = this.getAttribute('height') || 300;
       this.drawBalls();
-      window.requestAnimationFrame(this.step.bind(this));
+      window.requestAnimationFrame(this.stepBound);
     }
 
 
@@ -145,7 +147,7 @@ class Melt extends HTMLElement {
     }
     if (moved > 0) {
       this.ctx.putImageData(data, 0, 0, 0, 0, this.w, this.h);
-      window.requestAnimationFrame(this.step.bind(this));
+      window.requestAnimationFrame(this.stepBound);
       this.totalMoved += moved;
     } else {
       console.log(`Image collapsed after ${this.totalMoved} swaps.`)
