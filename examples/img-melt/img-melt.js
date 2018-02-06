@@ -5,10 +5,11 @@ class Melt extends HTMLElement {
 
   connectedCallback() {
     this.totalMoved=0;
-    this.shift = [-4, 0, 0, 0, 4];
-    this.jiggle = this.hasAttribute('jiggle');
+    if (!this.hasAttribute('jiggle')) this.jiggle = this.noJiggle;
     this.blend = this.hasAttribute('blend');
     this.src = this.getAttribute('src') || false;
+
+    this.stepBound = this.step.bind(this);
 
     // create shadow dom and a canvas and attach the two together
     this.canvas = document.createElement('canvas');
@@ -34,17 +35,15 @@ class Melt extends HTMLElement {
         obj.w = this.width;
         obj.h = this.height;
         console.log(obj);
-        window.requestAnimationFrame(obj.step.bind(obj));
+        window.requestAnimationFrame(obj.stepBound);
       }
       img.src = this.src;
     } else {
       this.w = this.getAttribute('width') || 300;
       this.h = this.getAttribute('height') || 300;
       this.drawBalls();
-      window.requestAnimationFrame(this.step.bind(this));
+      window.requestAnimationFrame(this.stepBound);
     }
-
-
   }
 
   drawBalls() {
@@ -53,106 +52,117 @@ class Melt extends HTMLElement {
     this.canvas.setAttribute("height", this.h);
 
     for (let i = 0; i < 100; i++) {
-      this.circ(
+      this.circle(
         Math.random() * this.w,
         Math.random() * this.h,
         Math.random() * this.w / 10,
-        this.ctx
+        this.randomColour()
       );
     }
   }
 
-  addyFor(x, y, jiggle = false) {
-    return y * (this.w * 4) + x * 4 + (jiggle ? this.shift[Math.round(Math.random()*4)] : 0);
+  xyToArr(x, y) {
+    return (y * this.w + x) * 4;
   }
 
-  rnd() {
-    return 255 * Math.random() | 0;
+  jiggle(x) {
+    const shiftProbability = 1/8;
+    const r = Math.random();
+    if (r < shiftProbability && x > 0) x -= 1;
+    if (r >= 1 - shiftProbability && x < this.w - 1) x += 1;
+    return x;
   }
 
-  rndCol() {
-    return `rgb(${this.rnd()},${this.rnd()},${this.rnd()})`;
+  noJiggle(x) {
+    return x;
   }
 
-  circ(x, y, r, ctx) {
+  randomByte() {
+    return Math.floor(255 * Math.random());
+  }
+
+  randomColour() {
+    return `rgb(${this.randomByte()},${this.randomByte()},${this.randomByte()})`;
+  }
+
+  circle(x, y, r, col) {
     x += 0.5;
     y += 0.5;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.closePath;
-    ctx.fillStyle = this.rndCol();
-    ctx.fill();
-  }
-
-  setcols(x, y, cols) {
-    const red = y * (w * 4) + x * 4;
-    return [red, red + 1, red + 2, red + 3];
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
+    this.ctx.arc(x, y, r, 0, 2 * Math.PI);
+    this.ctx.closePath;
+    this.ctx.fillStyle = col;
+    this.ctx.fill();
   }
 
   swapPixels(data, a, b) {
-    const tmp = [
-      data.data[b],
-      data.data[b + 1],
-      data.data[b + 2],
-      data.data[b + 3],
-    ];
-    data.data[b] = data.data[a];
-    data.data[b + 1] = data.data[a + 1];
-    data.data[b + 2] = data.data[a + 2];
-    data.data[b + 3] = data.data[a + 3];
-    data.data[a] = tmp[0];
-    data.data[a + 1] = tmp[1];
-    data.data[a + 2] = tmp[2];
-    data.data[a + 3] = tmp[3];
+    const tmp0 = data[b];
+    const tmp1 = data[b + 1];
+    const tmp2 = data[b + 2];
+    const tmp3 = data[b + 3];
+    data[b] = data[a];
+    data[b + 1] = data[a + 1];
+    data[b + 2] = data[a + 2];
+    data[b + 3] = data[a + 3];
+    data[a] = tmp0;
+    data[a + 1] = tmp1;
+    data[a + 2] = tmp2;
+    data[a + 3] = tmp3;
   }
 
-  nudge(data, a, b) {
-    if (data.data[a] > data.data[b]) {
-      data.data[a]--;
-      data.data[b]++;
-    }
-  }
-
+  /*
+   * merge pixels to move colours down and transparency up:
+   * if the pixel below has some transparency, and the above has some opacity,
+   * shift as much opacity from above to below as you can,
+   * and do a weighted average of the two colours based on how much opacity
+   * below had and how much was transferred
+   */
   mergePixels(data, a, b) {
-    this.nudge(data, a, b);
-    this.nudge(data, a+1, b+1);
-    this.nudge(data, a+2, b+2);
-    this.nudge(data, a+3, b+3);
+    if ((data[a+3] === 0) || (data[b+3] === 255)) return false;
+
+    const finalAlpha = Math.min(data[a+3] + data[b+3], 255);
+    const transferred = finalAlpha - data[b+3];
+    const original = data[b+3];
+    function weightedAvg(a,b) {
+      return Math.round((a*transferred + b*original) / finalAlpha);
+    }
+    data[b] = weightedAvg(data[a], data[b]);
+    data[b+1] = weightedAvg(data[a+1], data[b+1]);
+    data[b+2] = weightedAvg(data[a+2], data[b+2]);
+    data[b+3] = finalAlpha;
+    data[a+3] -= transferred;
+    return true;
   }
 
 
-  step(timestamp) {
-    let data = this.ctx.getImageData(0, 0, this.w, this.h);
+  step() {
+    let img = this.ctx.getImageData(0, 0, this.w, this.h);
     let moved = 0;
 
     // loop from the bottom to the top
     // moving the upper pixel down if it is
     // non transparent and the pixel below is transparent.
-    for (let y = this.h; y >= 0; y--) {
-      for (let x = this.w; x >= 0; x--) {
-        const jiggle = this.jiggle && x>0 && x<this.w;
-        const above = this.addyFor(x, y);
-        const below = this.addyFor(x, y+1, jiggle);
-        if (data.data[below + 3] == 0 && data.data[above + 3] != 0) {
+    for (let y = this.h-2; y >= 0; y--) {
+      for (let x = this.w-1; x >= 0; x--) {
+        const above = this.xyToArr(x, y);
+        const below = this.xyToArr(this.jiggle(x), y+1);
+        if (img.data[below + 3] == 0 && img.data[above + 3] != 0) {
           moved++;
-          this.swapPixels(data, above, below)
-        }
-        if (this.blend) {
-          this.mergePixels(data, above, below)
+          this.swapPixels(img.data, above, below);
+        } else if (this.blend) {
+          if (this.mergePixels(img.data, above, below)) moved++;
         }
       }
     }
     if (moved > 0) {
-      this.ctx.putImageData(data, 0, 0, 0, 0, this.w, this.h);
-      window.requestAnimationFrame(this.step.bind(this));
+      this.ctx.putImageData(img, 0, 0, 0, 0, this.w, this.h);
+      window.requestAnimationFrame(this.stepBound);
       this.totalMoved += moved;
     } else {
-      console.log(`Image collapsed after ${this.totalMoved} swaps.`)
+      console.log(`Image collapsed after ${this.totalMoved} moves.`)
     }
   }
-
-
 }
 
 customElements.define('img-melt', Melt);
