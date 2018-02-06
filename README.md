@@ -1,4 +1,5 @@
 # ws_components
-Web Components
+Examples from our Web Components lecture.
 
-[The IMG-MELT element](https://portsoc.github.io/ws_components/examples/img-melt/test.html)
+See also the [img-melt](http://portsoc.github.io/img-melt/) examples.
+
