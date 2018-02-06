@@ -96,11 +96,6 @@ class Melt extends HTMLElement {
     this.ctx.fill();
   }
 
-  setcols(x, y, cols) {
-    const red = y * (w * 4) + x * 4;
-    return [red, red + 1, red + 2, red + 3];
-  }
-
   swapPixels(data, a, b) {
     const tmp0 = data[b];
     const tmp1 = data[b + 1];
@@ -168,8 +163,6 @@ class Melt extends HTMLElement {
       console.log(`Image collapsed after ${this.totalMoved} moves.`)
     }
   }
-
-
 }
 
 customElements.define('img-melt', Melt);
