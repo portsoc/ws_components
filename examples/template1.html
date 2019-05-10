@@ -1,36 +1,22 @@
 <!doctype html>
 <title>Template Example 1</title>
 
-<!--
-  A button we can press each time we
-  want to use the template
--->
 <button id="b1">GO!</button>
+<main></main>
 
-<!--
-  This is where we will put elements when
-  they are cloned into real elements.
--->
-<main id="m1">
-</main>
-
-<!-- A template. -->
 <template id="t1">
   <p>Templates are easy to use.</p>
 </template>
 
-<!--
-  Attach the button to a function that
-  clones the node and adds it to the DOM.
--->
 <script>
-  const b1 = document.querySelector("m1");
-  const m1 = document.querySelector("b1");
-  const t1 = document.querySelector("t1");
 
-  b1.addEventListener("click", (e) => {
-    const cloned = t1.content.cloneNode(true);
-    m1.appendChild(cloned);
-  });
+const b1 = document.querySelector("#b1");
+const t1 = document.querySelector("#t1");
+const main = document.querySelector("main");
+
+b1.addEventListener("click", (e) => {
+  const cloned = t1.content.cloneNode(true);
+  main.appendChild(cloned);
+});
 
 </script>
