@@ -1,48 +1,33 @@
 <!doctype html>
 <title>Shadow DOM Example 3</title>
-<h1>Shadow DOM Example 3 (SELECT - not working yet)</h1>
+<h1>Shadow DOM Example 3</h1>
 
-<!--
-  A button we can press when we're ready
-  to replace some content
--->
 <button id="b1">GO!</button>
 
 <main>
-
-  <!--
-    Some content that will be replaced.
-  -->
   <section id="example">
-    <p id="one">Uno</p>
-    <p id="two">Dos</p>
-    <p id="three">Tres</p>
+    <p>Un</p>
+    <p>Deux</p>
+    <p>Trois</p>
+    <p>Pedwar</p>
   </section>
-
 </main>
 
 <template id="t1">
-  <content select="#one">Um</content>
-  <content select="#two">Hey</content>
-  <content select="*">Man...</content>
+    <p>One</p>
+    <p>Two</p>
+    <p>Three</p>
+    <p>Four</p>
 </template>
 
-
 <script>
-  const opts = {
-    mode: "open"
-  };
 
-  /*
-    Attach the button to a function that
-    establishes a shadow root for the `example`
-    node, and then populates that shadow DOM
-    with some content.  This time with an added
-    <style> element that only affects the
-    shadow DOM tree.
-  */
-  window.b1.addEventListener("click", () => {
-    var shadow = window.example.attachShadow(opts);
-    shadow.innerHTML = window.t1.innerHTML;
+  const b1 = document.querySelector("#b1");
+  const ex = document.querySelector("#example");
+  const opts = { mode: "open" };
+
+  b1.addEventListener("click", () => {
+    const shadow = ex.attachShadow(opts);
+    shadow.innerHTML = t1.innerHTML;
   });
 </script>
