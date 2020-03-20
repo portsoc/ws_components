@@ -1,7 +1,6 @@
-import { BetterThing } from "./betterthing.js";
+import { BetterThing } from './betterthing.js';
 
 export class EvenBetterThing extends BetterThing {
-
   get person() {
     return this.nonsense;
   }
@@ -9,5 +8,4 @@ export class EvenBetterThing extends BetterThing {
   set person(name) {
     this.nonsense = name;
   }
-
 }

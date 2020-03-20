@@ -1,48 +1,42 @@
 class Thing {
+  constructor(stuff, nonsense) {
+    this.stuff = stuff;
+    this.nonsense = nonsense;
+  }
 
-    constructor(stuff, nonsense) {
-        this.stuff = stuff;
-        this.nonsense = nonsense;
-    }
+  groovy() {
+    console.log('groovy');
+  }
 
-    groovy() {
-      console.log("groovy");
-    }
-
-    toString() {
-        return `${this.stuff} ${this.nonsense}`;
-    }
-
+  toString() {
+    return `${this.stuff} ${this.nonsense}`;
+  }
 }
 
 class BetterThing extends Thing {
+  constructor(stuff, nonsense, other) {
+    super(stuff, nonsense);
+    this.other = other;
+  }
 
 
-    constructor(stuff, nonsense, other) {
-        super(stuff, nonsense);
-        this.other = other;
-    }
-
-
-    toString() {
-        return `${this.other} ${super.toString()}`;
-    }
-
-
+  toString() {
+    return `${this.other} ${super.toString()}`;
+  }
 }
 
 
 // Create an object
-const myThing = new BetterThing("Rich", "Jacek", "Matt");
+const myThing = new BetterThing('Rich', 'Jacek', 'Matt');
 
 // Log it, concatenating it to a string so its toString methdo is invoked.
-console.log( "" + myThing );
+console.log('' + myThing);
 
 // invoke a method from the parent class
 myThing.groovy();
 
 // check its type
-console.log( typeof myThing );
+console.log(typeof myThing);
 
 // export the subclass for use elsewhere
 module.exports = BetterThing;

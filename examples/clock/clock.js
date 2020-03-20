@@ -1,18 +1,17 @@
-import {e} from './util.js';
+import { e } from './util.js';
 
 export class Clock extends HTMLElement {
-
   constructor() {
     super();
 
     const shadow = this.attachShadow({
-      mode: 'open'
+      mode: 'open',
     });
 
     e(shadow, 'link', {
-      rel: 'stylesheet', 
-      type: "text/css",
-      href: 'clock/clock.css'
+      rel: 'stylesheet',
+      type: 'text/css',
+      href: 'clock/clock.css',
     });
 
     const p = e(shadow, 'span');
@@ -20,7 +19,6 @@ export class Clock extends HTMLElement {
     window.setInterval(() => {
       p.textContent = new Date().toLocaleTimeString();
     }, 1000);
-
   }
 }
 
