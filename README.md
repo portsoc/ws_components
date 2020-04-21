@@ -1,4 +1,5 @@
 # ws_components
+
 Examples from our Web Components lecture.
 
 ## Templates
@@ -13,7 +14,6 @@ The `cloneNode` function takes one parameter: `deep` which should be `true` if a
 
 ### [Template 2](./examples/templates/template2.html)
 
-
 In `template2.html` we extend the example by altering the content of the template which now reads `<p>The time now is <em>not specified</em>.</p>`.
 
 When the template is inserted into the page the current time replaces the words "not specified" in the template.
@@ -25,7 +25,6 @@ In `template2.html` we highlight that a page can contain multiple templates by c
 ## Shadow DOM
 
 ### [Shadow 1](./examples/shadowdom/shadow1.html)
-
 
 In `shadow1.html` we define a web page with two parts: a button `b1`, and a `main` element which contains two sections, one of which has the id `example`.
 
@@ -55,8 +54,6 @@ In `shadow4.html` the difference between an open and closed shadow DOM is illust
 
 ### [Custom 3](./examples/custom/3/index.html)
 
-
-### Custom 4 - See Also...
+### Custom 4 - See Also…
 
 We've created a more 'useful' example of a web component called [img-melt](http://portsoc.github.io/img-melt/).
-
