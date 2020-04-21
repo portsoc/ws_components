@@ -1,19 +1,19 @@
 <!doctype html>
-<title>Shadow DOM Example 2</title>
-<h1>Shadow DOM Example 2</h1>
+<title>Shadow DOM Example 1</title>
+<h1>Shadow DOM Example 1</h1>
 
 <button id="b1">GO!</button>
 
 <main>
 
   <section id="example">
-    <p>one</p>
-    <p>two</p>
+    <p>This text will be replaced.</p>
+    <p>This will also change.</p>
   </section>
 
   <section>
-    <p>thee</p>
-    <p>four</p>
+    <p>This text will remain.</p>
+    <p>No change here.</p>
   </section>
 
 </main>
@@ -22,13 +22,13 @@
 
   const b1 = document.querySelector("#b1");
   const ex = document.querySelector("#example");
-  const opts = { mode: "open" };
+  const opts = { mode: "closed" };
 
   b1.addEventListener("click", () => {
     const shadow = ex.attachShadow(opts);
     shadow.innerHTML = `
-      <style>p { color: red; };</style>
-      <p>I am new!</p>
-      <p>So very lovely and new!</p>`;
+      <p>I part of a shadow DOM.</p>
+      <p>Inspect me to see my closed shadow-root.`;
   });
+
 </script>

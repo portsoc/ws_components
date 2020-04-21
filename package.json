@@ -4,8 +4,9 @@
   "description": "Intro to components.",
   "main": "index.js",
   "scripts": {
-    "common1": "node examples/commonjs/class1.js",
-    "es6mod": "node examples/es6module/index.js"
+    "common1": "node examples/modules/commonjs/class1.js",
+    "common2": "node examples/modules/commonjs/class2.js",
+    "es6mod": "node examples/modules/es6module/index.js"
   },
   "author": "Rich Boakes <rjb@boakes.org> (http://boakes.org/)",
   "license": "ISC",

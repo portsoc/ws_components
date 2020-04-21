@@ -1,0 +1,34 @@
+<!doctype html>
+<title>Shadow DOM Example 2</title>
+<h1>Shadow DOM Example 2</h1>
+
+<button id="b1">GO!</button>
+
+<main>
+
+  <section id="example">
+    <p>This text will be replaced.</p>
+    <p>This will also change.</p>
+  </section>
+
+  <section>
+    <p>This text will remain.</p>
+    <p>No change here.</p>
+  </section>
+
+</main>
+
+<script>
+
+  const b1 = document.querySelector("#b1");
+  const ex = document.querySelector("#example");
+  const opts = { mode: "closed" };
+
+  b1.addEventListener("click", () => {
+    const shadow = ex.attachShadow(opts);
+    shadow.innerHTML = `
+      <style>p { color: red; };</style>
+      <p>I part of a shadow DOM.</p>
+      <p>My style does not affect the rest of the document</p>`;
+  });
+</script>

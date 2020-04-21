@@ -1,0 +1,26 @@
+<!doctype html>
+<title>Shadow DOM Example 4</title>
+<h1>Shadow DOM Example 4</h1>
+
+<main>
+
+  <section id="example1">
+  </section>
+
+  <section id="example2">
+  </section>
+
+</main>
+
+<script>
+
+  const ex1 = document.querySelector("#example1");
+  const ex2 = document.querySelector("#example2");
+
+  const open = ex1.attachShadow({ mode: "open" });
+  const closed = ex2.attachShadow({ mode: "closed" });
+
+  ex1.shadowRoot.innerHTML = "<p>hello ex1</p>";
+  ex2.shadowRoot.innerHTML = "<p>hello ex2</p>";
+
+</script>

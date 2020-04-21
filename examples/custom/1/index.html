@@ -1,0 +1,26 @@
+<!doctype html>
+<title>Custom Element Example 1</title>
+
+<script>
+  class Clock extends HTMLElement {
+    constructor() {
+      super();
+
+      const shadow = this.attachShadow({ mode: 'closed' });
+
+      const span = document.createElement('span');
+      shadow.appendChild(span);
+
+      window.setInterval(() => {
+        span.textContent = new Date().toLocaleTimeString();
+      }, 1000);
+
+    }
+  }
+
+  customElements.define('my-clock', Clock);
+</script>
+
+<h1>Custom Element Example 1</h1>
+
+<p>This sentence includes (right here: <my-clock></my-clock>) a live and working clock that is completely encapsulated within a web component that is defined in this page.</p>
